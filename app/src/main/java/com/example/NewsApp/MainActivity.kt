@@ -8,7 +8,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,6 +33,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.material3.Icon
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
+
 import com.example.NewsApp.ui.theme.AppTheme
 
 import com.example.shittyapp.R
@@ -75,21 +79,34 @@ class MainActivity : ComponentActivity() {
     @Preview
     @Composable
     fun AboutApp() {
-        Row(
+        Column (
             modifier = Modifier
                 .padding(70.dp, 70.dp)
                 .fillMaxWidth()
-                .verticalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.Center
+                .fillMaxHeight()
+                .verticalScroll(rememberScrollState())
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.images),
-                contentDescription = "",
+            Row(
                 modifier = Modifier
-                    .clip(CircleShape)
-                    .size(200.dp)
-                    .verticalScroll(rememberScrollState())
-            )
+                    .fillMaxWidth()
+                    .padding(2.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.images),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(200.dp)
+                )
+            }
+            repeat(10) {
+                Row(
+                    modifier = Modifier.padding(2.dp)
+                ) {
+                    Text(text = stringResource(id = R.string.developer_name))
+                }
+            }
         }
     }
 }

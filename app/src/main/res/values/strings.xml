@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">ShittyApp</string>
+    <string name ="app_name">ShittyApp</string>
+    <string name="developer_name">Developer: Shavel Danila</string>
 </resources>
