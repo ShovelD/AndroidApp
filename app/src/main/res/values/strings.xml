@@ -1,4 +1,5 @@
 <resources>
-    <string name ="app_name">ShittyApp</string>
+    <string name ="app_name">App title: NewsApp</string>
     <string name="developer_name">Developer: Shavel Danila</string>
+    <string name="developer_email">email: gamedev124403@gmail.com</string>
 </resources>

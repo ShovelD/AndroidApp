@@ -7,6 +7,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -35,6 +37,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
@@ -44,12 +49,23 @@ import com.example.shittyapp.R
 
 class MainActivity : ComponentActivity() {
 
+    companion object {
+        val aboutDeveloper = listOf(
+            R.string.app_name,
+            R.string.developer_name,
+            R.string.developer_email
+        )
+    }
+    val AcmeFont = FontFamily(
+        Font(R.font.acme_regular)
+    )
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AppTheme(true) {
-                mainComposable()
+                MainComposable()
             }
         }
     }
@@ -57,23 +73,22 @@ class MainActivity : ComponentActivity() {
     @Preview
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
-    fun mainComposable() {
+    fun MainComposable() {
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primary,
-                        titleContentColor = MaterialTheme.colorScheme.secondary
+                        titleContentColor = MaterialTheme.colorScheme.tertiary
                     ),
-                    title = { Text(text = "About app") },
+                    title = { Text(text = "About app", fontFamily = AcmeFont, fontSize = 30.sp) },
                     navigationIcon = {
                         IconButton(onClick = { /*TODO*/ }) {
                             Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
                         }
                     }
                 )
-            }
-
+            },
         ) {
             AboutApp()
         }
@@ -82,9 +97,9 @@ class MainActivity : ComponentActivity() {
     @Preview
     @Composable
     fun AboutApp() {
-        Column (
+        Column(
             modifier = Modifier
-                .padding(70.dp, 70.dp)
+                .padding(20.dp, 70.dp)
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .verticalScroll(rememberScrollState())
@@ -96,19 +111,24 @@ class MainActivity : ComponentActivity() {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.images),
+                    painter = painterResource(id = R.drawable.developer_logo),
                     contentDescription = "",
                     modifier = Modifier
-                        .clip(CircleShape)
+                        .clip(CutCornerShape(45.dp))
                         .size(200.dp)
+                        .align(Alignment.CenterVertically)
+                        .clickable {  }
                 )
             }
-            repeat(4) {
+            for (i in aboutDeveloper) {
                 Row(
-                    modifier = Modifier.padding(5.dp),
+                    modifier = Modifier.padding(5.dp)
+                        .clip(CutCornerShape(5.dp))
+                        .background(color = MaterialTheme.colorScheme.primary),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Text(text = stringResource(id = R.string.developer_name),
+                    Text(fontFamily = AcmeFont,
+                        text = stringResource(i),
                         fontSize = 24.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.align(Alignment.CenterVertically)
