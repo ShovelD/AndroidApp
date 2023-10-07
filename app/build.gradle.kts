@@ -41,7 +41,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
     packaging {
         resources {
@@ -72,4 +72,5 @@ dependencies {
     implementation (libs.google.accompanist.permissions)
     implementation(libs.koin.core)
     implementation(libs.koin.android)
+    implementation(libs.compose.navigation)
 }
