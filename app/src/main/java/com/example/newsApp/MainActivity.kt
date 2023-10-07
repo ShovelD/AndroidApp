@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.NewsApp
+package com.example.newsApp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -39,13 +39,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
-import com.example.NewsApp.ui.theme.AppTheme
-
-import com.example.shittyapp.R
+import com.example.newsApp.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -69,6 +66,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 
     @Preview
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

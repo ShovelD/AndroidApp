@@ -1,4 +1,4 @@
-package com.example.NewsApp.main
+package com.example.newsApp.main
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext
