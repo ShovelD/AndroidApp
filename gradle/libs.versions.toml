@@ -34,6 +34,10 @@ koin-android = {group = "io.insert-koin",name = "koin-android",version = "3.4.3"
 
 compose-navigation = {group = "androidx.navigation",name = "navigation-compose",version = "2.7.4"}
 
+compose-UI = {group = "androidx.compose.ui",name = "ui", version = "1.5.3"}
+compose-UI-tooling-preview = {group = "androidx.compose.ui",name = "ui-tooling-preview", version = "1.5.3"}
+compose-material = {group = "androidx.compose.material",name = "material", version = "1.5.3"}
+
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }

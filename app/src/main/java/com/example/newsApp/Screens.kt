@@ -22,19 +22,23 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,16 +47,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenComposable(onClick: () -> Unit) {
+fun HomeScreenComposable(onClick: () -> Unit,onEditClick: () -> Unit) {
     val viewModel = viewModel<HomeViewModel>()
     Scaffold(
         topBar = {
@@ -61,7 +65,7 @@ fun HomeScreenComposable(onClick: () -> Unit) {
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.tertiary
                 ),
-                title = { Text(text = "HomeScreen", fontFamily = MainActivity.AcmeFont, fontSize = 30.sp) },
+                title = { Text(text = "Home", fontFamily = MainActivity.AcmeFont, fontSize = 30.sp) },
                 navigationIcon = {
                     IconButton(onClick = { onClick() }) {
                         Icon(imageVector = Icons.Filled.Info, contentDescription = "Info")
@@ -79,33 +83,33 @@ fun HomeScreenComposable(onClick: () -> Unit) {
             }
         }
     ){
-        HomeScreen(viewModel)
+        HomeScreen(viewModel,onEditClick)
     }
 }
 
 @Composable
 //@Preview
-private fun HomeScreen(viewModel: HomeViewModel) {
+private fun HomeScreen(viewModel: HomeViewModel,onEditClick: () -> Unit) {
     LazyColumn(
         modifier = Modifier
             .padding(5.dp, 70.dp)
             .fillMaxSize(),
     ) {
         items(viewModel.items.size) { index ->
-            NewsArticles(viewModel.items[index],index + 1)
+            NewsArticles(viewModel.items[index],index + 1,onEditClick)
         }
     }
 }
 
 @Composable
-fun NewsArticles(article: NewsArticle,index:Int) {
+fun NewsArticles(article: NewsArticle, index:Int, onEditClick: () -> Unit) {
 
     Row(
         modifier = Modifier
             .clip(CutCornerShape(5))
             .fillMaxWidth()
             .padding(2.dp)
-            .clickable { },
+            .clickable {},
         horizontalArrangement = Arrangement.End
     ) {
         Column(
@@ -113,7 +117,7 @@ fun NewsArticles(article: NewsArticle,index:Int) {
                 .padding(5.dp)
         ) {
             Row {
-                IconButton(onClick = { /*TODO*/ },
+                IconButton(onClick = {  },
                     modifier = Modifier
                         .clip(RoundedCornerShape(50))
                         .background(MaterialTheme.colorScheme.primary)
@@ -127,7 +131,7 @@ fun NewsArticles(article: NewsArticle,index:Int) {
                 }
             }
             Row {
-                IconButton(onClick = { /*TODO*/ },
+                IconButton(onClick = { onEditClick() },
                     modifier = Modifier
                         .clip(RoundedCornerShape(50))
                         .background(MaterialTheme.colorScheme.primary)
@@ -245,6 +249,66 @@ private fun AboutApp() {
                         .fillMaxWidth()
                 )
             }
+        }
+    }
+}
+
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EditComposable(onClick: () -> Unit) {
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.tertiary
+                ),
+                title = { Text(text = "Edit", fontFamily = MainActivity.AcmeFont, fontSize = 30.sp) },
+                navigationIcon = {
+                    IconButton(onClick = { onClick() }) {
+                        Icon(imageVector = Icons.Filled.Home, contentDescription = "Home")
+                    }
+                },
+            )
+        }
+    ){
+        EditScreen()
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Preview
+fun EditScreen() {
+    var titleText by remember { mutableStateOf("Title") }
+    var authorText by remember { mutableStateOf("Author") }
+
+    LazyColumn(
+        modifier = Modifier
+            .padding(5.dp, 70.dp)
+            .fillMaxSize(),
+    ){
+        item{
+            TextField(value = titleText,
+                onValueChange = { titleText = it },
+                label = { Text(text = "Article Title",color = MaterialTheme.colorScheme.secondary)},
+                maxLines = 1,
+                modifier = Modifier.fillMaxWidth()
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(10))
+                    .background(MaterialTheme.colorScheme.primary),
+            )
+            TextField(value = authorText,
+                onValueChange = { authorText = it },
+                label = { Text(text = "Author Title",color = MaterialTheme.colorScheme.secondary)},
+                maxLines = 1,
+                modifier = Modifier.fillMaxWidth()
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(10))
+                    .background(MaterialTheme.colorScheme.primary),
+            )
         }
     }
 }

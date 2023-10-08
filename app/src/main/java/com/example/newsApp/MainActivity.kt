@@ -7,6 +7,7 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -55,9 +56,12 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     ) {
-                        HomeScreenComposable {
-                            navController.navigate("AboutAppScreen")
-                        }
+                        HomeScreenComposable(
+                            { navController.navigate("AboutAppScreen") },
+                            { navController.navigate("EditScreen") }
+                        )
+
+
                     }
 
                     composable(
@@ -84,8 +88,34 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
+                    composable(
+                        "EditScreen",
+                        enterTransition = {
+                            slideIntoContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
+                                animationSpec = tween(400)
+                            )
+                        },
+                        exitTransition = {
+                            slideOutOfContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
+                                animationSpec = tween(400)
+                            )
+                        }
+                    ) {
+                        EditComposable {
+                            navController.navigate("HomeScreen") {
+                                popUpTo("HomeScreen") {
+                                    inclusive = true
+                                }
+                            }
+                        }
+                    }
+
+
                 }
             }
         }
     }
+
 }
