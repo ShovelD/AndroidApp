@@ -7,7 +7,6 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -60,8 +59,6 @@ class MainActivity : ComponentActivity() {
                             { navController.navigate("AboutAppScreen") },
                             { navController.navigate("EditScreen") }
                         )
-
-
                     }
 
                     composable(
