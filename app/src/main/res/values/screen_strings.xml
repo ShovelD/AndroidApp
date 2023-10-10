@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name ="home_screen">Home</string>
+    <string name="edit_screen">Edit</string>
+    <string name="info_screen">About App</string>
+</resources>

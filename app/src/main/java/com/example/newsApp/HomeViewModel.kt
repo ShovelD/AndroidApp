@@ -7,42 +7,47 @@ import java.util.Date
 import java.util.UUID
 
 data class NewsArticle(
-    val articleTitle:String,
-    val articleAuthor:String,
-    val articleDescription:String,
-    val articlePublishingDate:Date,
-    val isDraft:Boolean,
-    val id:UUID = UUID.randomUUID()
+    val articleTitle: String,
+    val articleAuthor: String,
+    val articleDescription: String,
+    val articlePublishingDate: Date,
+    val isDraft: Boolean,
+    val tags: List<String>,
+    val id: UUID = UUID.randomUUID()
 )
 
-class HomeViewModel(): ViewModel(){
-    val items:SnapshotStateList<NewsArticle> = DefaultNewsArticles.toMutableStateList()
+class HomeViewModel() : ViewModel() {
+    val items: SnapshotStateList<NewsArticle> = DefaultNewsArticles.toMutableStateList()
 
     fun onClickRemoveArticle(newsArticle: NewsArticle) = items.remove(newsArticle)
     fun onClickAddArticle() = items.add(
         NewsArticle(
-            "fucking peace of shit",
-            "me",
-            "f*cku",
+            "article",
+            "author",
+            "description",
             Date(),
             true,
+            listOf("")
         )
     )
+
     private companion object {
         private val DefaultNewsArticles = listOf(
             NewsArticle(
-                "fucking shit",
-                "me",
-                "no",
+                "article",
+                "author",
+                "description",
                 Date(),
                 true,
+                listOf("")
             ),
             NewsArticle(
-                "fucking peace of shit",
-                "me",
-                "f*cku",
+                "article",
+                "author",
+                "description",
                 Date(),
                 true,
+                listOf("")
             )
         )
     }

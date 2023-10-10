@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="author">"Author: "</string>
+    <string name="description">"Description: "</string>
+    <string name="date">"Date: "</string>
+    <string name="draft">Draft </string>
+    <string name="tags">"Tags: "</string>
+    <string name="title">Title</string>
+</resources>
