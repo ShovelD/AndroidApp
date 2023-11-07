@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,8 +29,10 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -41,6 +45,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,15 +60,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.UUID
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenComposable(onClick: () -> Unit, onEditClick: () -> Unit) {
+fun HomeScreenComposable(navHostController: NavHostController) {
     val viewModel = viewModel<HomeViewModel>()
+    val myState: State<HomeState> = viewModel.state.collectAsStateWithLifecycle()
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -79,7 +92,7 @@ fun HomeScreenComposable(onClick: () -> Unit, onEditClick: () -> Unit) {
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { onClick() }) {
+                    IconButton(onClick = { navHostController.navigate("AboutAppScreen")}) {
                         Icon(imageVector = Icons.Filled.Info, contentDescription = "Info")
                     }
                 },
@@ -87,7 +100,7 @@ fun HomeScreenComposable(onClick: () -> Unit, onEditClick: () -> Unit) {
         },
         floatingActionButton = {
             SmallFloatingActionButton(
-                onClick = { viewModel.onClickAddArticle() },
+                onClick = { navHostController.navigate("EditScreen") },
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.secondary
             ) {
@@ -95,33 +108,61 @@ fun HomeScreenComposable(onClick: () -> Unit, onEditClick: () -> Unit) {
             }
         }
     ) {
-        HomeScreen(viewModel, onEditClick)
-    }
-}
-
-@Composable
-//@Preview
-private fun HomeScreen(viewModel: HomeViewModel, onEditClick: () -> Unit) {
-    LazyColumn(
-        modifier = Modifier
-            .padding(5.dp, 70.dp)
-            .fillMaxSize(),
-    ) {
-        items(viewModel.items.size) { index ->
-            NewsArticles(viewModel.items[index], index + 1, onEditClick)
+        when(myState.value) {
+         is HomeState.DisplayingNewsArticles->
+            HomeScreen(
+                onDeleteClick = {newsArticle->
+                    val job = Job()
+                    val scope = CoroutineScope(job)
+                    scope.launch {
+                        viewModel.onClickRemoveArticle(newsArticle)
+                    }
+                },
+                onEditClick = { navHostController.navigate("EditScreen") },
+                myState
+            )
+            is HomeState.Empty-> HomeScreenLoading ()
+            is HomeState.Error-> HomeScreenLoading()
+            HomeState.Loading-> HomeScreenLoading()
         }
     }
 }
 
 @Composable
-fun NewsArticles(article: NewsArticle, index: Int, onEditClick: () -> Unit) {
+private fun HomeScreen(onDeleteClick:(NewsArticle)->Unit, onEditClick: () -> Unit,state: State<HomeState>) {
+    LazyColumn(
+        modifier = Modifier
+            .padding(5.dp, 70.dp)
+            .fillMaxSize(),
+    ) {
+        itemsIndexed(items = (state.value as HomeState.DisplayingNewsArticles).newsArticles){_,item->
+            if (item != null) {
+                NewsArticle(article = item,onEditClick,onDeleteClick =  {onDeleteClick(item)})
 
+            }
+        }
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Preview
+fun HomeScreenLoading(){
+    AlertDialog(onDismissRequest = { /*TODO*/ }) {
+        CircularProgressIndicator(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.secondary
+        )
+    }
+}
+
+@Composable
+fun NewsArticle(article: NewsArticle, onEditClick: () -> Unit,onDeleteClick: () -> Unit) {
     Row(
         modifier = Modifier
             .clip(CutCornerShape(5))
             .fillMaxWidth()
-            .padding(2.dp)
-            .clickable {},
+            .padding(2.dp),
         horizontalArrangement = Arrangement.End
     ) {
         Column(
@@ -130,7 +171,7 @@ fun NewsArticles(article: NewsArticle, index: Int, onEditClick: () -> Unit) {
         ) {
             Row {
                 IconButton(
-                    onClick = { },
+                    onClick = { onDeleteClick.invoke() },
                     modifier = Modifier
                         .clip(RoundedCornerShape(50))
                         .background(MaterialTheme.colorScheme.primary)
@@ -145,7 +186,7 @@ fun NewsArticles(article: NewsArticle, index: Int, onEditClick: () -> Unit) {
             }
             Row {
                 IconButton(
-                    onClick = { onEditClick() },
+                    onClick = { onEditClick()},
                     modifier = Modifier
                         .clip(RoundedCornerShape(50))
                         .background(MaterialTheme.colorScheme.primary)
@@ -171,12 +212,6 @@ fun NewsArticles(article: NewsArticle, index: Int, onEditClick: () -> Unit) {
                 .background(MaterialTheme.colorScheme.primary)
                 .fillMaxWidth()
         ) {
-
-            Text(
-                text = index.toString() + article.articleTitle,
-                fontFamily = MainActivity.AcmeFont,
-                fontSize = 16.sp
-            )
             Text(
                 text = stringResource(R.string.author) + article.articleAuthor,
                 fontFamily = MainActivity.AcmeFont,

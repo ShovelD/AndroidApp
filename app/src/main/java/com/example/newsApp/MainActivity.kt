@@ -27,7 +27,6 @@ class MainActivity : ComponentActivity() {
         )
     }
 
-
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,10 +54,8 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     ) {
-                        HomeScreenComposable(
-                            { navController.navigate("AboutAppScreen") },
-                            { navController.navigate("EditScreen") }
-                        )
+                        HomeScreenComposable(navController)
+
                     }
 
                     composable(
@@ -108,11 +105,8 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-
-
                 }
             }
         }
     }
-
 }
