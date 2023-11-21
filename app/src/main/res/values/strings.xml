@@ -2,4 +2,6 @@
     <string name ="app_name">App title: NewsApp</string>
     <string name="developer_name">Developer: Shavel Danila</string>
     <string name="developer_email">email: gamedev124403@gmail.com</string>
+    <string name="list_is_empty">List is empty</string>
+    <string name="save_changes">Save Changes</string>
 </resources>

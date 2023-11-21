@@ -5,14 +5,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-
-
+import com.example.newsApp.screens.AboutAppComposable
+import com.example.newsApp.screens.EditComposable
+import com.example.newsApp.screens.EditScreen
+import com.example.newsApp.screens.HomeScreen
 import com.example.newsApp.ui.theme.AppTheme
+import com.google.gson.GsonBuilder
+import java.util.UUID
+
 
 class MainActivity : ComponentActivity() {
 
@@ -27,18 +34,16 @@ class MainActivity : ComponentActivity() {
         )
     }
 
-
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navController = rememberNavController()
             AppTheme(true) {
+                val navController = rememberNavController()
                 NavHost(
                     navController = navController,
                     startDestination = "HomeScreen"
                 ) {
-
                     composable(
                         "HomeScreen",
                         enterTransition = {
@@ -55,10 +60,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     ) {
-                        HomeScreenComposable(
-                            { navController.navigate("AboutAppScreen") },
-                            { navController.navigate("EditScreen") }
-                        )
+                        HomeScreen(navController)
                     }
 
                     composable(
@@ -76,17 +78,11 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     ) {
-                        AboutAppComposable {
-                            navController.navigate("HomeScreen") {
-                                popUpTo("HomeScreen") {
-                                    inclusive = true
-                                }
-                            }
-                        }
+                        AboutAppComposable(navController)
                     }
 
                     composable(
-                        "EditScreen",
+                        "EditScreen?id={id}",
                         enterTransition = {
                             slideIntoContainer(
                                 towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
@@ -99,20 +95,14 @@ class MainActivity : ComponentActivity() {
                                 animationSpec = tween(400)
                             )
                         }
-                    ) {
-                        EditComposable {
-                            navController.navigate("HomeScreen") {
-                                popUpTo("HomeScreen") {
-                                    inclusive = true
-                                }
-                            }
-                        }
+                    ) { navBackStackEntry ->
+                        val idString = navBackStackEntry.arguments?.getString("id")
+                        val converter = GsonBuilder().create()
+                        val id = converter.fromJson(idString, UUID::class.java)
+                        EditComposable(navController, id = id)
                     }
-
-
                 }
             }
         }
     }
-
 }

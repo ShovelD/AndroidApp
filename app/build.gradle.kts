@@ -54,6 +54,7 @@ dependencies {
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.viewmodel)
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
@@ -76,5 +77,7 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material)
+    implementation(libs.androidx.lifecycle)
 
+    implementation(libs.gson)
 }

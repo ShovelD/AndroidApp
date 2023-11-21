@@ -1,8 +1,11 @@
 package com.example.newsApp
 
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import java.util.Date
 import java.util.UUID
 
@@ -16,25 +19,22 @@ data class NewsArticle(
     val id: UUID = UUID.randomUUID()
 )
 
-class HomeViewModel() : ViewModel() {
-    val items: SnapshotStateList<NewsArticle> = DefaultNewsArticles.toMutableStateList()
+class HomeViewModel : ViewModel() {
+    val state: StateFlow<HomeState> =
+        NewsRepositoryImpl.getNewsArticles()
+            .map{data->
+                when{
+                    data.isEmpty()->HomeState.Empty
+                    else->HomeState.DisplayingNewsArticles(data)
+                }
+            }.stateIn(viewModelScope,SharingStarted.Lazily,HomeState.Loading)
 
-    fun onClickRemoveArticle(newsArticle: NewsArticle) = items.remove(newsArticle)
-    fun onClickAddArticle() = items.add(
-        NewsArticle(
-            "article",
-            "author",
-            "description",
-            Date(),
-            true,
-            listOf("")
-        )
-    )
+    suspend fun onClickRemoveArticle(newsArticle: NewsArticle) = NewsRepositoryImpl.delete(newsArticle.id)
 
-    private companion object {
-        private val DefaultNewsArticles = listOf(
+     companion object {
+         val DefaultNewsArticles = listOf(
             NewsArticle(
-                "article",
+                "article1",
                 "author",
                 "description",
                 Date(),
@@ -42,13 +42,37 @@ class HomeViewModel() : ViewModel() {
                 listOf("")
             ),
             NewsArticle(
-                "article",
+                "article3",
                 "author",
                 "description",
                 Date(),
                 true,
                 listOf("")
-            )
+            ),
+             NewsArticle(
+                 "article",
+                 "author",
+                 "description",
+                 Date(),
+                 true,
+                 listOf("")
+             ),
+             NewsArticle(
+                 "article",
+                 "author",
+                 "description",
+                 Date(),
+                 true,
+                 listOf("")
+             ),
+             NewsArticle(
+                 "article",
+                 "author",
+                 "description",
+                 Date(),
+                 true,
+                 listOf("")
+             )
         )
     }
 }
