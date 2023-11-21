@@ -5,14 +5,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.newsApp.screens.AboutAppComposable
 import com.example.newsApp.screens.EditComposable
+import com.example.newsApp.screens.EditScreen
 import com.example.newsApp.screens.HomeScreen
+import com.google.gson.GsonBuilder
+import java.util.UUID
 
 
 class MainActivity : ComponentActivity() {
@@ -71,17 +76,11 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 ) {
-                    AboutAppComposable {
-                        navController.navigate("HomeScreen") {
-                            popUpTo("HomeScreen") {
-                                this.inclusive = true
-                            }
-                        }
-                    }
+                    AboutAppComposable(navController)
                 }
 
                 composable(
-                    "EditScreen",
+                    "EditScreen?id={id}",
                     enterTransition = {
                         slideIntoContainer(
                             towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
@@ -94,14 +93,11 @@ class MainActivity : ComponentActivity() {
                             animationSpec = tween(400)
                         )
                     }
-                ) {
-                    EditComposable {
-                        navController.navigate("HomeScreen") {
-                            popUpTo("HomeScreen") {
-                                inclusive = true
-                            }
-                        }
-                    }
+                ) { navBackStackEntry ->
+                    val idString = navBackStackEntry.arguments?.getString("id")
+                    val converter = GsonBuilder().create()
+                    val id = converter.fromJson(idString, UUID::class.java)
+                    EditComposable(navController,id = id)
                 }
             }
         }

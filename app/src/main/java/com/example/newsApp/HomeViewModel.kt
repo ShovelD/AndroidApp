@@ -1,7 +1,5 @@
 package com.example.newsApp
 
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -37,7 +35,7 @@ class HomeViewModel : ViewModel() {
      companion object {
          val DefaultNewsArticles = listOf(
             NewsArticle(
-                "article",
+                "article1",
                 "author",
                 "description",
                 Date(),
@@ -45,7 +43,7 @@ class HomeViewModel : ViewModel() {
                 listOf("")
             ),
             NewsArticle(
-                "article",
+                "article3",
                 "author",
                 "description",
                 Date(),

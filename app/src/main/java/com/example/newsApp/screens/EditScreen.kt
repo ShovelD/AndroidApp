@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DatePicker
@@ -28,6 +29,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,14 +40,31 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.newsApp.EditState
+import com.example.newsApp.EditViewModel
 import com.example.newsApp.MainActivity
+import com.example.newsApp.NewsArticle
 import com.example.newsApp.R
+import kotlinx.coroutines.launch
+import java.util.Date
+import java.util.UUID
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditComposable(onClick: () -> Unit) {
+fun EditComposable(
+    navController: NavController = rememberNavController(),
+                   id:UUID? = null) {
+    val viewModel = viewModel<EditViewModel>()
+
+    viewModel.setStateFlow(id)
+    val myState: State<EditState> = viewModel.state.collectAsStateWithLifecycle()
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -61,24 +80,55 @@ fun EditComposable(onClick: () -> Unit) {
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { onClick() }) {
+                    IconButton(onClick = {
+                        navController.navigate("HomeScreen") {
+                            popUpTo("HomeScreen") {
+                                inclusive = true;
+                            }
+                        }
+                    }) {
                         Icon(imageVector = Icons.Filled.Home, contentDescription = "Home")
                     }
                 },
             )
         }
     ) {
-        EditScreen()
+        when (myState.value) {
+            is EditState.Loading -> {}
+            is EditState.DisplayNewsArticle -> {
+                EditScreen(
+                    myState.value,
+                    onSave = { newsArticle ->
+                        viewModel.viewModelScope.launch {
+                            viewModel.onClickSave(newsArticle = newsArticle)
+                            navController.popBackStack()
+                        }
+                    }
+                )
+            }
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview
-fun EditScreen() {
-    var titleText by remember { mutableStateOf("Title") }
-    var authorText by remember { mutableStateOf("Author") }
-    var description by remember { mutableStateOf("Description") }
+fun EditScreen(stateValue: EditState,onSave:(NewsArticle)->Unit) {
+    var article = NewsArticle(
+        "article",
+        "author",
+        "description",
+        Date(),
+        true,
+        listOf("")
+    )
+    if((stateValue as EditState.DisplayNewsArticle).newsArticle != null)
+    {
+        article = stateValue.newsArticle!!
+    }
+    var titleText by remember{ mutableStateOf(article.articleTitle)}
+    var authorText  by remember{ mutableStateOf(article.articleAuthor)}
+    var description  by remember{ mutableStateOf(article.articleDescription)}
+    val checkedState = remember { mutableStateOf(article.isDraft) }
     LazyColumn(
         modifier = Modifier
             .padding(5.dp, 70.dp)
@@ -153,15 +203,28 @@ fun EditScreen() {
                 Column(
                     modifier = Modifier
                 ) {
-                    val checkedState = remember { mutableStateOf(true) }
+
                     Checkbox(
                         checked = checkedState.value,
                         onCheckedChange = { checkedState.value = it })
                 }
             }
-
             val datePickerState = rememberDatePickerState()
             DatePicker(state = datePickerState, showModeToggle = true)
+            Button(onClick = {
+                onSave(NewsArticle(
+                    titleText,
+                    authorText,
+                    description,
+                    Date(),
+                    checkedState.value,
+                    listOf(""),
+                    id = stateValue.newsArticle?.id ?: UUID.randomUUID()
+                ))},
+                modifier = Modifier.fillMaxWidth()) {
+                Text(text = "Save Changes")
+            }
+
         }
     }
 }

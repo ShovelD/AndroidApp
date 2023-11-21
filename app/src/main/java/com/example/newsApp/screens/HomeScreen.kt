@@ -1,9 +1,7 @@
 package com.example.newsApp.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,11 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -70,19 +63,19 @@ fun HomeScreen(navController: NavController) {
             scope.launch {
                 viewModel.onClickRemoveArticle(newsArticle)
             }
-        }, onEditClick = { navController.navigate("EditScreen") },
+        },
         navController,
         state = myState.value
     )
 }
 
 @Composable
-private fun HomeScreenContent(onDeleteClick:(NewsArticle)->Unit, onEditClick: () -> Unit, navController: NavController,state: HomeState) {
+private fun HomeScreenContent(onDeleteClick:(NewsArticle)->Unit, navController: NavController,state: HomeState) {
     Scaffold(
         topBar = { HomeScreenTopBar(navController = navController)},
         floatingActionButton = {
             SmallFloatingActionButton(
-                onClick = { navController.navigate("EditScreen") },
+                onClick = { navController.navigate("EditScreen?id = ${null}")},
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.secondary
             ) {
@@ -99,9 +92,9 @@ private fun HomeScreenContent(onDeleteClick:(NewsArticle)->Unit, onEditClick: ()
                     .verticalScroll(rememberScrollState())
                 ) {
                     for(item in state.newsArticles){
-                        NewsArticle(
+                        NewsArticleItem(
                             article = item,
-                            onEditClick = { onEditClick()},
+                            navController,
                             onDeleteClick = {onDeleteClick(item)})
                     }
                 }
@@ -124,7 +117,7 @@ fun HomeScreenLoading(){
 }
 
 @Composable
-fun NewsArticle(article: NewsArticle, onEditClick: () -> Unit, onDeleteClick: () -> Unit) {
+fun NewsArticleItem(article: NewsArticle,navController: NavController, onDeleteClick: () -> Unit) {
     Row(
         modifier = Modifier
             .clip(CutCornerShape(5))
@@ -153,7 +146,7 @@ fun NewsArticle(article: NewsArticle, onEditClick: () -> Unit, onDeleteClick: ()
             }
             Row {
                 IconButton(
-                    onClick = { onEditClick()},
+                    onClick = { navController.navigate("EditScreen?id=${article.id}")},
                     modifier = Modifier
                         .clip(RoundedCornerShape(50))
                         .background(MaterialTheme.colorScheme.primary)
@@ -180,7 +173,7 @@ fun NewsArticle(article: NewsArticle, onEditClick: () -> Unit, onDeleteClick: ()
                 .fillMaxWidth()
         ) {
             Text(
-                text = stringResource(R.string.author) + article.articleAuthor,
+                text = article.articleAuthor,
                 fontFamily = MainActivity.AcmeFont,
                 fontSize = 14.sp
             )

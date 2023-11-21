@@ -29,7 +29,7 @@ object InMemoryNewsDataSource:NewsDataSource {
             emit(news[id])
         }
     override suspend fun upsert(newsArticle: NewsArticle) {
-        news.values.add(newsArticle)
+        news[newsArticle.id] = newsArticle
         _newsFlow.emit(news)
     }
 

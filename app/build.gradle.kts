@@ -78,4 +78,6 @@ dependencies {
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material)
     implementation(libs.androidx.lifecycle)
+
+    implementation(libs.gson)
 }

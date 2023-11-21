@@ -33,13 +33,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.newsApp.MainActivity
 import com.example.newsApp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AboutAppComposable(onClick: () -> Unit) {
+fun AboutAppComposable(navController: NavController) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -55,7 +56,13 @@ fun AboutAppComposable(onClick: () -> Unit) {
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { onClick.invoke() }) {
+                    IconButton(onClick = {
+                        navController.navigate("HomeScreen") {
+                            popUpTo("HomeScreen") {
+                                this.inclusive = true
+                            }
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back"
