@@ -16,6 +16,7 @@ import com.example.newsApp.screens.AboutAppComposable
 import com.example.newsApp.screens.EditComposable
 import com.example.newsApp.screens.EditScreen
 import com.example.newsApp.screens.HomeScreen
+import com.example.newsApp.ui.theme.AppTheme
 import com.google.gson.GsonBuilder
 import java.util.UUID
 
@@ -37,67 +38,69 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navController = rememberNavController()
-            NavHost(
-                navController = navController,
-                startDestination = "HomeScreen"
-            ) {
-                composable(
-                    "HomeScreen",
-                    enterTransition = {
-                        slideIntoContainer(
-                            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
-                            animationSpec = tween(400)
-                        )
-                    },
-
-                    exitTransition = {
-                        slideOutOfContainer(
-                            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
-                            animationSpec = tween(400)
-                        )
-                    }
+            AppTheme(true) {
+                val navController = rememberNavController()
+                NavHost(
+                    navController = navController,
+                    startDestination = "HomeScreen"
                 ) {
-                    HomeScreen(navController)
-                }
+                    composable(
+                        "HomeScreen",
+                        enterTransition = {
+                            slideIntoContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
+                                animationSpec = tween(400)
+                            )
+                        },
 
-                composable(
-                    "AboutAppScreen",
-                    enterTransition = {
-                        slideIntoContainer(
-                            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
-                            animationSpec = tween(400)
-                        )
-                    },
-                    exitTransition = {
-                        slideOutOfContainer(
-                            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
-                            animationSpec = tween(400)
-                        )
+                        exitTransition = {
+                            slideOutOfContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
+                                animationSpec = tween(400)
+                            )
+                        }
+                    ) {
+                        HomeScreen(navController)
                     }
-                ) {
-                    AboutAppComposable(navController)
-                }
 
-                composable(
-                    "EditScreen?id={id}",
-                    enterTransition = {
-                        slideIntoContainer(
-                            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
-                            animationSpec = tween(400)
-                        )
-                    },
-                    exitTransition = {
-                        slideOutOfContainer(
-                            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
-                            animationSpec = tween(400)
-                        )
+                    composable(
+                        "AboutAppScreen",
+                        enterTransition = {
+                            slideIntoContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
+                                animationSpec = tween(400)
+                            )
+                        },
+                        exitTransition = {
+                            slideOutOfContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
+                                animationSpec = tween(400)
+                            )
+                        }
+                    ) {
+                        AboutAppComposable(navController)
                     }
-                ) { navBackStackEntry ->
-                    val idString = navBackStackEntry.arguments?.getString("id")
-                    val converter = GsonBuilder().create()
-                    val id = converter.fromJson(idString, UUID::class.java)
-                    EditComposable(navController,id = id)
+
+                    composable(
+                        "EditScreen?id={id}",
+                        enterTransition = {
+                            slideIntoContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
+                                animationSpec = tween(400)
+                            )
+                        },
+                        exitTransition = {
+                            slideOutOfContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
+                                animationSpec = tween(400)
+                            )
+                        }
+                    ) { navBackStackEntry ->
+                        val idString = navBackStackEntry.arguments?.getString("id")
+                        val converter = GsonBuilder().create()
+                        val id = converter.fromJson(idString, UUID::class.java)
+                        EditComposable(navController, id = id)
+                    }
                 }
             }
         }

@@ -30,7 +30,6 @@ class HomeViewModel : ViewModel() {
             }.stateIn(viewModelScope,SharingStarted.Lazily,HomeState.Loading)
 
     suspend fun onClickRemoveArticle(newsArticle: NewsArticle) = NewsRepositoryImpl.delete(newsArticle.id)
-    suspend fun onClickAddArticle(newsArticle: NewsArticle) = NewsRepositoryImpl.upsert(newsArticle)
 
      companion object {
          val DefaultNewsArticles = listOf(

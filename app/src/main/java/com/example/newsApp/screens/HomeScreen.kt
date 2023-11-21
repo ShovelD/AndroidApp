@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -85,7 +86,7 @@ private fun HomeScreenContent(onDeleteClick:(NewsArticle)->Unit, navController: 
     ) {
         values->
         when(state){
-            is HomeState.Empty -> HomeScreenLoading()
+            is HomeState.Empty -> HomeScreenEmpty(modifier = Modifier.padding(values).fillMaxWidth())
             is HomeState.DisplayingNewsArticles ->{
                 Column(modifier = Modifier
                     .padding(values)
@@ -99,21 +100,31 @@ private fun HomeScreenContent(onDeleteClick:(NewsArticle)->Unit, navController: 
                     }
                 }
             }
-            is HomeState.Error -> HomeScreenLoading()
-            HomeState.Loading -> HomeScreenLoading()
+            is HomeState.Error -> HomeScreenLoading(modifier = Modifier.padding(values))
+            HomeState.Loading -> HomeScreenLoading(modifier = Modifier.padding(values))
         }
     }
 }
 @Composable
-@Preview
-fun HomeScreenLoading(){
+fun HomeScreenLoading(modifier: Modifier){
     Dialog(onDismissRequest = { /*TODO*/ }) {
         CircularProgressIndicator(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier,
             color = MaterialTheme.colorScheme.primary,
-            trackColor = MaterialTheme.colorScheme.secondary
+            trackColor = MaterialTheme.colorScheme.tertiary
         )
     }
+}
+
+@Composable
+fun HomeScreenEmpty(modifier: Modifier) {
+    Text(
+        text = stringResource(R.string.list_is_empty),
+        color = MaterialTheme.colorScheme.tertiary,
+        fontFamily = MainActivity.AcmeFont,
+        textAlign = TextAlign.Center,
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -172,6 +183,11 @@ fun NewsArticleItem(article: NewsArticle,navController: NavController, onDeleteC
                 .background(MaterialTheme.colorScheme.primary)
                 .fillMaxWidth()
         ) {
+            Text(
+                text = article.articleTitle,
+                fontFamily = MainActivity.AcmeFont,
+                fontSize = 14.sp
+            )
             Text(
                 text = article.articleAuthor,
                 fontFamily = MainActivity.AcmeFont,
