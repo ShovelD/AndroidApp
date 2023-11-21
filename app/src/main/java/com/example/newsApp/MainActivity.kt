@@ -10,9 +10,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.newsApp.screens.AboutAppComposable
+import com.example.newsApp.screens.EditComposable
+import com.example.newsApp.screens.HomeScreen
 
-
-import com.example.newsApp.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -32,76 +33,72 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            AppTheme(true) {
-                NavHost(
-                    navController = navController,
-                    startDestination = "HomeScreen"
-                ) {
+            NavHost(
+                navController = navController,
+                startDestination = "HomeScreen"
+            ) {
+                composable(
+                    "HomeScreen",
+                    enterTransition = {
+                        slideIntoContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
+                            animationSpec = tween(400)
+                        )
+                    },
 
-                    composable(
-                        "HomeScreen",
-                        enterTransition = {
-                            slideIntoContainer(
-                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
-                                animationSpec = tween(400)
-                            )
-                        },
-
-                        exitTransition = {
-                            slideOutOfContainer(
-                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
-                                animationSpec = tween(400)
-                            )
-                        }
-                    ) {
-                        HomeScreenComposable(navController)
-
+                    exitTransition = {
+                        slideOutOfContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
+                            animationSpec = tween(400)
+                        )
                     }
+                ) {
+                    HomeScreen(navController)
+                }
 
-                    composable(
-                        "AboutAppScreen",
-                        enterTransition = {
-                            slideIntoContainer(
-                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
-                                animationSpec = tween(400)
-                            )
-                        },
-                        exitTransition = {
-                            slideOutOfContainer(
-                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
-                                animationSpec = tween(400)
-                            )
-                        }
-                    ) {
-                        AboutAppComposable {
-                            navController.navigate("HomeScreen") {
-                                popUpTo("HomeScreen") {
-                                    inclusive = true
-                                }
+                composable(
+                    "AboutAppScreen",
+                    enterTransition = {
+                        slideIntoContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
+                            animationSpec = tween(400)
+                        )
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
+                            animationSpec = tween(400)
+                        )
+                    }
+                ) {
+                    AboutAppComposable {
+                        navController.navigate("HomeScreen") {
+                            popUpTo("HomeScreen") {
+                                this.inclusive = true
                             }
                         }
                     }
+                }
 
-                    composable(
-                        "EditScreen",
-                        enterTransition = {
-                            slideIntoContainer(
-                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
-                                animationSpec = tween(400)
-                            )
-                        },
-                        exitTransition = {
-                            slideOutOfContainer(
-                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
-                                animationSpec = tween(400)
-                            )
-                        }
-                    ) {
-                        EditComposable {
-                            navController.navigate("HomeScreen") {
-                                popUpTo("HomeScreen") {
-                                    inclusive = true
-                                }
+                composable(
+                    "EditScreen",
+                    enterTransition = {
+                        slideIntoContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
+                            animationSpec = tween(400)
+                        )
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
+                            animationSpec = tween(400)
+                        )
+                    }
+                ) {
+                    EditComposable {
+                        navController.navigate("HomeScreen") {
+                            popUpTo("HomeScreen") {
+                                inclusive = true
                             }
                         }
                     }

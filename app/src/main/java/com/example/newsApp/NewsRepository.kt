@@ -7,7 +7,7 @@ import java.util.UUID
 
 interface NewsRepository {
     fun getNewsArticle(id:UUID?): Flow<NewsArticle?>
-    fun getNewsArticles():Flow<List<NewsArticle?>>
+    fun getNewsArticles():Flow<List<NewsArticle>>
     suspend fun upsert(newsArticle: NewsArticle)
     suspend fun delete(id: UUID)
 }
@@ -19,7 +19,7 @@ object NewsRepositoryImpl: NewsRepository {
         return dataSource.getNewsArticle(id)
     }
 
-    override fun getNewsArticles(): Flow<List<NewsArticle?>> {
+    override fun getNewsArticles(): Flow<List<NewsArticle>> {
         return dataSource.getNewsArticles()
     }
 
@@ -34,6 +34,6 @@ object NewsRepositoryImpl: NewsRepository {
 sealed interface HomeState{
     data object Loading: HomeState
     data object Empty: HomeState
-    data class DisplayingNewsArticles(val newsArticles: List<NewsArticle?>): HomeState
+    data class DisplayingNewsArticles(val newsArticles: List<NewsArticle>): HomeState
     data class Error(val e:Exception): HomeState
 }

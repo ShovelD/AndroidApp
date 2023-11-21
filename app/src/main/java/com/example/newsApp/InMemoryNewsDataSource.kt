@@ -26,7 +26,7 @@ object InMemoryNewsDataSource:NewsDataSource {
         .map {it[id] }
         .onStart {
             delay(1000L)
-            emit(news.getValue(id))
+            emit(news[id])
         }
     override suspend fun upsert(newsArticle: NewsArticle) {
         news.values.add(newsArticle)

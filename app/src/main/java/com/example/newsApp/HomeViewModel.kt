@@ -51,7 +51,31 @@ class HomeViewModel : ViewModel() {
                 Date(),
                 true,
                 listOf("")
-            )
+            ),
+             NewsArticle(
+                 "article",
+                 "author",
+                 "description",
+                 Date(),
+                 true,
+                 listOf("")
+             ),
+             NewsArticle(
+                 "article",
+                 "author",
+                 "description",
+                 Date(),
+                 true,
+                 listOf("")
+             ),
+             NewsArticle(
+                 "article",
+                 "author",
+                 "description",
+                 Date(),
+                 true,
+                 listOf("")
+             )
         )
     }
 }
