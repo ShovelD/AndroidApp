@@ -5,16 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.newsApp.screens.AboutAppComposable
 import com.example.newsApp.screens.EditComposable
-import com.example.newsApp.screens.EditScreen
 import com.example.newsApp.screens.HomeScreen
 import com.example.newsApp.ui.theme.AppTheme
 import com.google.gson.GsonBuilder

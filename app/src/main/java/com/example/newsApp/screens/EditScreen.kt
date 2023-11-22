@@ -38,9 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -55,8 +53,6 @@ import com.example.newsApp.MainActivity
 import com.example.newsApp.NewsArticle
 import com.example.newsApp.R
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.UUID
 
@@ -136,6 +132,10 @@ fun EditScreen(stateValue: EditState,onSave:(NewsArticle)->Unit) {
     var authorText by remember { mutableStateOf(article.articleAuthor) }
     var description by remember { mutableStateOf(article.articleDescription) }
     val checkedState = remember { mutableStateOf(article.isDraft) }
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = article.articlePublishingDate.time,
+        initialDisplayMode = DisplayMode.Input
+    )
     LazyColumn(
         modifier = Modifier
             .padding(5.dp, 70.dp)
@@ -220,10 +220,7 @@ fun EditScreen(stateValue: EditState,onSave:(NewsArticle)->Unit) {
                         onCheckedChange = { checkedState.value = it })
                 }
             }
-            val datePickerState = rememberDatePickerState(
-                initialSelectedDateMillis = article.articlePublishingDate.time,
-                initialDisplayMode = DisplayMode.Input
-            )
+
             DatePicker(state = datePickerState, showModeToggle = true)
 
             Button(
@@ -250,6 +247,28 @@ fun EditScreen(stateValue: EditState,onSave:(NewsArticle)->Unit) {
 
         }
     }
+}
+
+@Composable
+fun EditableTextField(text:String,label:String){
+    var value by remember { mutableStateOf(text) }
+    TextField(
+        value = value,
+        onValueChange = { value = it },
+        label = {
+            Text(
+                text = stringResource(R.string.title),
+                color = MaterialTheme.colorScheme.secondary,
+                fontFamily = MainActivity.AcmeFont, fontSize = 14.sp
+            )
+        },
+        maxLines = 1,
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10))
+            .background(MaterialTheme.colorScheme.primary),
+    )
 }
 @Composable
 fun EditScreenLoading(modifier:Modifier){

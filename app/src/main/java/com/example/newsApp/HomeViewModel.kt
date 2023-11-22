@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.serialization.Serializable
 import java.util.Date
 import java.util.UUID
-
 data class NewsArticle(
     val articleTitle: String,
     val articleAuthor: String,

@@ -2,11 +2,18 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp)
+   // alias(libs.plugins.multiplatform)
+    alias(libs.plugins.serialization)
 }
 
 android {
     namespace = "com.example.newsApp"
     compileSdk = 34
+
+    packaging{
+        resources.excludes.add("META-INF/*")
+    }
 
     defaultConfig {
         applicationId = "com.example.newsApp"
@@ -48,6 +55,11 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    ksp{
+        arg("room.schemaLocation", "$projectDir/schema")
+        arg("room.incremental", "true")
+        arg("room.expandProjection", "true")
+    }
 }
 
 dependencies {
@@ -70,7 +82,7 @@ dependencies {
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 
-    implementation (libs.google.accompanist.permissions)
+    implementation(libs.google.accompanist.permissions)
     implementation(libs.koin.core)
     implementation(libs.koin.android)
     implementation(libs.compose.navigation)
@@ -80,4 +92,16 @@ dependencies {
     implementation(libs.androidx.lifecycle)
 
     implementation(libs.gson)
+    implementation(libs.kotlinx)
+
+    implementation(libs.ktor.core)
+    implementation(libs.ktor.netty)
+    implementation(libs.ktor.default.headers)
+    implementation(libs.ktor.status.pages)
+
+
+    annotationProcessor(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
+
+
 }

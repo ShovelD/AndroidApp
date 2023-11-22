@@ -1,13 +1,13 @@
 package com.example.newsApp
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import java.util.UUID
 import com.example.newsApp.HomeViewModel.Companion.DefaultNewsArticles
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import java.util.UUID
 
 object InMemoryNewsDataSource:NewsDataSource {
 
