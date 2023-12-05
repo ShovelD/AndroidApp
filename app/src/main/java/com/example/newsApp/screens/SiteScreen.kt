@@ -1,13 +1,16 @@
 package com.example.newsApp.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,6 +24,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -44,15 +48,6 @@ fun SiteComposable(navController: NavController){
 fun SiteScreenContent(navController: NavController, onItemClicked:(NewsArticle)->Unit,state:RemoteState){
     Scaffold(
         topBar = { RemoteScreenTopBar(navController = navController) },
-        floatingActionButton = {
-            SmallFloatingActionButton(
-                onClick = { navController.navigate("EditScreen?id = ${null}")},
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.secondary
-            ) {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = "add", tint = Color.Green)
-            }
-        }
     ) {
             values->
         when(state){
@@ -74,13 +69,20 @@ fun SiteScreenContent(navController: NavController, onItemClicked:(NewsArticle)-
     }
 }
 @Composable
-fun RemoteNewsArticle(article: NewsArticle,onItemClick:()->Unit){
-    Text(text = article.articleTitle, modifier = Modifier.padding(30.dp).clickable { onItemClick.invoke()})
+fun RemoteNewsArticle(article: NewsArticle,onItemClick:()->Unit) {
+    Text(
+        text = article.articleTitle,
+        modifier = Modifier.padding(30.dp).
+        clickable { onItemClick.invoke() }
+            .clip(RoundedCornerShape(10))
+            .background(MaterialTheme.colorScheme.secondary),
+
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RemoteScreenTopBar(navController: NavController){
+fun RemoteScreenTopBar(navController: NavController) {
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -94,8 +96,15 @@ fun RemoteScreenTopBar(navController: NavController){
             )
         },
         navigationIcon = {
-            IconButton(onClick = { navController.navigate("HomeScreen")}) {
-                Icon(imageVector = Icons.Filled.Info, contentDescription = "Info")
+            IconButton(onClick = {
+                navController.navigate("HomeScreen") {
+                    popUpTo("HomeScreen") {
+                        inclusive = true;
+                    }
+                }
+            }
+            ) {
+                Icon(imageVector = Icons.Filled.Favorite, contentDescription = "Info")
             }
         },
     )

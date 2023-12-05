@@ -2,9 +2,11 @@ package com.example.newsApp.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,7 +19,9 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -134,7 +138,8 @@ fun NewsArticleItem(article: NewsArticle, navController: NavController, onDelete
         modifier = Modifier
             .clip(CutCornerShape(5))
             .fillMaxWidth()
-            .padding(2.dp),
+            .padding(2.dp)
+            .clickable { navController.navigate("EditScreen?id=${article.id}")},
         horizontalArrangement = Arrangement.End
     ) {
         Column(
@@ -142,12 +147,12 @@ fun NewsArticleItem(article: NewsArticle, navController: NavController, onDelete
                 .padding(5.dp)
         ) {
             Row {
-                IconButton(
-                    onClick = { onDeleteClick()},
+                Button(
+                    onClick = { onDeleteClick() },
                     modifier = Modifier
-                        .clip(RoundedCornerShape(50))
+                        .clip(RoundedCornerShape(10))
                         .background(MaterialTheme.colorScheme.primary)
-
+                        .fillMaxHeight()
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Delete,
@@ -156,25 +161,11 @@ fun NewsArticleItem(article: NewsArticle, navController: NavController, onDelete
                     )
                 }
             }
-            Row {
-                IconButton(
-                    onClick = { navController.navigate("EditScreen?id=${article.id}")},
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(50))
-                        .background(MaterialTheme.colorScheme.primary)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Edit,
-                        contentDescription = "Edit",
-                        tint = Color.Blue,
-                    )
-                }
-            }
         }
 
         Column(
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.primary)
+                .background(MaterialTheme.colorScheme.secondary)
                 .fillMaxWidth()
         ) {
             Text(
@@ -236,7 +227,7 @@ fun HomeScreenTopBar(navController: NavController){
         },
         actions = {
             IconButton(onClick = { navController.navigate("SiteScreen")}) {
-                Icon(imageVector = Icons.Filled.ShoppingCart, contentDescription ="shit" )
+                Icon(imageVector = Icons.Filled.MailOutline, contentDescription ="shit" )
             }
         }
     )

@@ -40,7 +40,7 @@ data class Source(
 )
 internal class RemoteDataSourceImpl(private val client:HttpClient):RemoteNewsDataSource {
     override fun getArticles(): Flow<List<NewsArticle>> = flow{
-        val url = "https://newsapi.org/v2/top-headlines?country=us&apiKey=f482bb95f0b540b6955a9ce07862a55a"
+        val url = "https://newsapi.org/v2/everything?q=games&apiKey=f482bb95f0b540b6955a9ce07862a55a"
         val response = client.get{
             url(url)
             accept(ContentType.Application.Json)
