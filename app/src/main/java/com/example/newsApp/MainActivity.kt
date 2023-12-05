@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.newsApp.screens.AboutAppComposable
 import com.example.newsApp.screens.EditComposable
 import com.example.newsApp.screens.HomeScreen
+import com.example.newsApp.screens.SiteComposable
 import com.example.newsApp.ui.theme.AppTheme
 import com.google.gson.GsonBuilder
 import java.util.UUID
@@ -97,6 +98,23 @@ class MainActivity : ComponentActivity() {
                         val converter = GsonBuilder().create()
                         val id = converter.fromJson(idString, UUID::class.java)
                         EditComposable(navController, id = id)
+                    }
+                    composable(
+                        "SiteScreen",
+                        enterTransition = {
+                            slideIntoContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
+                                animationSpec = tween(400)
+                            )
+                        },
+                        exitTransition = {
+                            slideOutOfContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
+                                animationSpec = tween(400)
+                            )
+                        }
+                    ) {
+                        SiteComposable(navController)
                     }
                 }
             }

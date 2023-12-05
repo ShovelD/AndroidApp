@@ -61,6 +61,16 @@ ktor-netty = {group = "io.ktor",name ="ktor-server-netty",version.ref = "ktor-ve
 ktor-status-pages = {group = "io.ktor",name ="ktor-server-status-pages",version.ref = "ktor-version"}
 ktor-default-headers ={group = "io.ktor",name ="ktor-server-default-headers",version.ref = "ktor-version"}
 
+ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor-version" }
+ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor-version" }
+ktor-client-auth = { group = "io.ktor", name = "ktor-client-auth", version.ref = "ktor-version" }
+ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor-version" }
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor-version" }
+ktor-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor-version" }
+ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor-version" }
+ktor-client-encoding = { module = "io.ktor:ktor-client-encoding", version.ref = "ktor-version" }
+
+
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }

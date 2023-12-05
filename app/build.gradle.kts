@@ -100,6 +100,16 @@ dependencies {
     implementation(libs.ktor.default.headers)
     implementation(libs.ktor.status.pages)
 
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.auth)
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.encoding)
+
+
     implementation(libs.room.ktx)
 
     annotationProcessor(libs.androidx.room.compiler)

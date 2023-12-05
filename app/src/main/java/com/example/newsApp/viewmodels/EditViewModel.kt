@@ -15,13 +15,16 @@ sealed interface EditState{
 
 class EditViewModel(private val newsRepository: NewsRepository) : ViewModel() {
     val state = MutableStateFlow<EditState>(EditState.Loading)
-    suspend fun onClickSave(newsArticle: NewsArticle) = newsRepository.upsert(newsArticle)
+    suspend fun onClickSave(newsArticle: NewsArticle) {
+        viewModelScope.launch {
+            newsRepository.upsert(newsArticle)
+        }
+    }
 
     fun setStateFlow(id:UUID?){
         viewModelScope.launch{
             newsRepository.getNewsArticle(id).collect{ newsArticle->
                 state.value = EditState.DisplayNewsArticle(newsArticle)
-
             }
         }
     }

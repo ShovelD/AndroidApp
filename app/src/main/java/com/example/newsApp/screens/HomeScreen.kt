@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -84,7 +85,9 @@ private fun HomeScreenContent(onDeleteClick:(NewsArticle)->Unit, navController: 
     ) {
         values->
         when(state){
-            is HomeState.Empty -> HomeScreenEmpty(modifier = Modifier.padding(values).fillMaxWidth())
+            is HomeState.Empty -> HomeScreenEmpty(modifier = Modifier
+                .padding(values)
+                .fillMaxWidth())
             is HomeState.DisplayingNewsArticles ->{
                 Column(modifier = Modifier
                     .padding(values)
@@ -168,13 +171,6 @@ fun NewsArticleItem(article: NewsArticle, navController: NavController, onDelete
                 }
             }
         }
-        Image(
-            painter = painterResource(id = R.drawable.developer_logo),
-            contentDescription = "",
-            modifier = Modifier
-                .clip(CutCornerShape(5))
-                .size(100.dp)
-        )
 
         Column(
             modifier = Modifier
@@ -238,6 +234,11 @@ fun HomeScreenTopBar(navController: NavController){
                 Icon(imageVector = Icons.Filled.Info, contentDescription = "Info")
             }
         },
+        actions = {
+            IconButton(onClick = { navController.navigate("SiteScreen")}) {
+                Icon(imageVector = Icons.Filled.ShoppingCart, contentDescription ="shit" )
+            }
+        }
     )
 }
 
