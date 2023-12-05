@@ -1,5 +1,8 @@
 package com.example.newsApp
 
+import com.example.newsApp.datasources.InMemoryNewsDataSource
+import com.example.newsApp.datasources.NewsDataSource
+import com.example.newsApp.viewmodels.NewsArticle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import java.util.UUID
@@ -29,10 +32,4 @@ object NewsRepositoryImpl: NewsRepository {
     override suspend fun delete(id: UUID) {
             dataSource.delete(id)
     }
-}
-sealed interface HomeState{
-    data object Loading: HomeState
-    data object Empty: HomeState
-    data class DisplayingNewsArticles(val newsArticles: List<NewsArticle>): HomeState
-    data class Error(val e:Exception): HomeState
 }

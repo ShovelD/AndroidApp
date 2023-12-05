@@ -47,10 +47,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.newsApp.EditState
-import com.example.newsApp.EditViewModel
+import com.example.newsApp.viewmodels.EditState
+import com.example.newsApp.viewmodels.EditViewModel
 import com.example.newsApp.MainActivity
-import com.example.newsApp.NewsArticle
+import com.example.newsApp.viewmodels.NewsArticle
 import com.example.newsApp.R
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -116,7 +116,7 @@ fun EditComposable(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditScreen(stateValue: EditState,onSave:(NewsArticle)->Unit) {
+fun EditScreen(stateValue: EditState, onSave:(NewsArticle)->Unit) {
     var article = NewsArticle(
         "article",
         "author",

@@ -1,7 +1,8 @@
-package com.example.newsApp
+package com.example.newsApp.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.newsApp.NewsRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -17,7 +18,7 @@ class EditViewModel : ViewModel() {
 
     fun setStateFlow(id:UUID?){
         viewModelScope.launch{
-            NewsRepositoryImpl.getNewsArticle(id).collect{newsArticle->
+            NewsRepositoryImpl.getNewsArticle(id).collect{ newsArticle->
                 state.value = EditState.DisplayNewsArticle(newsArticle)
 
             }

@@ -41,11 +41,11 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.newsApp.HomeState
-import com.example.newsApp.HomeViewModel
+import com.example.newsApp.viewmodels.HomeViewModel
 import com.example.newsApp.MainActivity
-import com.example.newsApp.NewsArticle
+import com.example.newsApp.viewmodels.NewsArticle
 import com.example.newsApp.R
+import com.example.newsApp.viewmodels.HomeState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -69,7 +69,7 @@ fun HomeScreen(navController: NavController) {
 }
 
 @Composable
-private fun HomeScreenContent(onDeleteClick:(NewsArticle)->Unit, navController: NavController,state: HomeState) {
+private fun HomeScreenContent(onDeleteClick:(NewsArticle)->Unit, navController: NavController, state: HomeState) {
     Scaffold(
         topBar = { HomeScreenTopBar(navController = navController)},
         floatingActionButton = {
@@ -126,7 +126,7 @@ fun HomeScreenEmpty(modifier: Modifier) {
 }
 
 @Composable
-fun NewsArticleItem(article: NewsArticle,navController: NavController, onDeleteClick: () -> Unit) {
+fun NewsArticleItem(article: NewsArticle, navController: NavController, onDeleteClick: () -> Unit) {
     Row(
         modifier = Modifier
             .clip(CutCornerShape(5))

@@ -1,6 +1,7 @@
-package com.example.newsApp
+package com.example.newsApp.datasources
 
-import com.example.newsApp.HomeViewModel.Companion.DefaultNewsArticles
+import com.example.newsApp.viewmodels.HomeViewModel.Companion.DefaultNewsArticles
+import com.example.newsApp.viewmodels.NewsArticle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -9,10 +10,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import java.util.UUID
 
-object InMemoryNewsDataSource:NewsDataSource {
+object InMemoryNewsDataSource: NewsDataSource {
 
     private val news = DefaultNewsArticles.associateBy { it.id }.toMutableMap()
-    private val _newsFlow = MutableSharedFlow<Map<UUID,NewsArticle>>(1)
+    private val _newsFlow = MutableSharedFlow<Map<UUID, NewsArticle>>(1)
     override fun getNewsArticles(): Flow<List<NewsArticle>> = _newsFlow
         .asSharedFlow()
         .map{it.values.toList()}
