@@ -85,6 +85,7 @@ dependencies {
     implementation(libs.google.accompanist.permissions)
     implementation(libs.koin.core)
     implementation(libs.koin.android)
+    implementation(libs.koin.compose)
     implementation(libs.compose.navigation)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
@@ -99,6 +100,7 @@ dependencies {
     implementation(libs.ktor.default.headers)
     implementation(libs.ktor.status.pages)
 
+    implementation(libs.room.ktx)
 
     annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)

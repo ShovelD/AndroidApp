@@ -1,28 +1,22 @@
-package com.example.newsApp
+package com.example.newsApp.repositories
 
-import com.example.newsApp.datasources.InMemoryNewsDataSource
+import com.example.newsApp.datasources.NewsDataSourceImpl
 import com.example.newsApp.datasources.NewsDataSource
 import com.example.newsApp.viewmodels.NewsArticle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import java.util.UUID
 
-interface NewsRepository {
-    fun getNewsArticle(id:UUID?): Flow<NewsArticle?>
-    fun getNewsArticles():Flow<List<NewsArticle>>
-    suspend fun upsert(newsArticle: NewsArticle)
-    suspend fun delete(id: UUID)
-}
-object NewsRepositoryImpl: NewsRepository {
 
-    private val dataSource: NewsDataSource = InMemoryNewsDataSource
+internal class NewsRepositoryImpl(private val dataSource : NewsDataSource): NewsRepository {
+
     override fun getNewsArticle(id: UUID?): Flow<NewsArticle?> {
         if (id == null) return flowOf(null)
-        return dataSource.getNewsArticle(id)
+        return dataSource.getArticle(id)
     }
 
     override fun getNewsArticles(): Flow<List<NewsArticle>> {
-        return dataSource.getNewsArticles()
+        return dataSource.getNews()
     }
 
     override suspend fun upsert(newsArticle: NewsArticle) {

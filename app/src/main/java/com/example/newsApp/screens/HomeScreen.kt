@@ -39,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.newsApp.viewmodels.HomeViewModel
 import com.example.newsApp.MainActivity
@@ -49,11 +48,12 @@ import com.example.newsApp.viewmodels.HomeState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 import java.text.SimpleDateFormat
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    val viewModel = viewModel<HomeViewModel>()
+    val viewModel = koinInject<HomeViewModel>()
     val myState: State<HomeState> = viewModel.state.collectAsStateWithLifecycle()
     HomeScreenContent(
         onDeleteClick = { newsArticle ->

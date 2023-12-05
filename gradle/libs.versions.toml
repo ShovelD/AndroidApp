@@ -11,7 +11,7 @@ activity-compose = "1.8.1"
 compose-bom = "2023.10.01"
 lifecycle_version="2.6.2"
 lifecycle-viewmodel-ktx = "2.6.2"
-room-version = "2.6.0"
+room-version = "2.6.1"
 ksp-version = "1.9.10-1.0.13"
 kotlinx-version = "1.6.1"
 ktor-version = "2.3.6"
@@ -37,8 +37,10 @@ material3 = { group = "androidx.compose.material3", name = "material3",version =
 accompanist-permissions ={group = "com.google.accompanist",name = "accompanist-permission",version = "0.33.1-alpha"}
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.1.4" }
 androidx-lifecycle={group = "androidx.lifecycle",name="lifecycle-runtime-compose",version.ref = "lifecycle_version"}
-koin-core = {group = "io.insert-koin",name = "koin-core",version = "3.4.3"}
-koin-android = {group = "io.insert-koin",name = "koin-android",version = "3.4.3"}
+
+koin-core = {group = "io.insert-koin",name = "koin-core",version = "3.5.0"}
+koin-android = {group = "io.insert-koin",name = "koin-android",version = "3.5.0"}
+koin-compose = { group = "io.insert-koin", name = "koin-compose", version = "1.1.0" }
 
 compose-navigation = {group = "androidx.navigation",name = "navigation-compose",version = "2.7.5"}
 
@@ -48,8 +50,10 @@ compose-material = {group = "androidx.compose.material",name = "material", versi
 
 gson = {group = "com.google.code.gson",name = "gson",version = "2.10.1"}
 
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room-version" }
 androidx-room = {group = "androidx.room",name = "room-runtime",version.ref = "room-version"}
 androidx-room-compiler = {group = "androidx.room",name = "room-compiler",version.ref = "room-version"}
+
 kotlinx = {group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-version"}
 
 ktor-core = {group = "io.ktor",name ="ktor-server-core",version.ref = "ktor-version"}
@@ -63,6 +67,5 @@ org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.re
 ksp = {id="com.google.devtools.ksp",version.ref = "ksp-version"}
 multiplatform = {id = "org.jetbrains.kotlin.multiplatform",version.ref = "org-jetbrains-kotlin-android"}
 serialization = {id = "org.jetbrains.kotlin.plugin.serialization",version.ref = "org-jetbrains-kotlin-android"}
-
 [bundles]
 

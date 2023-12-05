@@ -52,7 +52,9 @@ import com.example.newsApp.viewmodels.EditViewModel
 import com.example.newsApp.MainActivity
 import com.example.newsApp.viewmodels.NewsArticle
 import com.example.newsApp.R
+import com.example.newsApp.viewmodels.HomeViewModel
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 import java.util.Date
 import java.util.UUID
 
@@ -63,7 +65,7 @@ import java.util.UUID
 fun EditComposable(
     navController: NavController = rememberNavController(),
                    id:UUID? = null) {
-    val viewModel = viewModel<EditViewModel>()
+    val viewModel = koinInject<EditViewModel>()
 
     viewModel.setStateFlow(id)
     val myState: State<EditState> = viewModel.state.collectAsStateWithLifecycle()

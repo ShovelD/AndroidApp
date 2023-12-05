@@ -2,15 +2,16 @@ package com.example.newsApp.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.newsApp.NewsRepositoryImpl
+import com.example.newsApp.repositories.NewsRepository
+import com.example.newsApp.repositories.NewsRepositoryImpl
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.util.Date
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel() {
     val state: StateFlow<HomeState> =
-        NewsRepositoryImpl.getNewsArticles()
+        newsRepository.getNewsArticles()
             .map { data ->
                 when {
                     data.isEmpty() -> HomeState.Empty
@@ -19,7 +20,7 @@ class HomeViewModel : ViewModel() {
             }.stateIn(viewModelScope, SharingStarted.Lazily, HomeState.Loading)
 
     suspend fun onClickRemoveArticle(newsArticle: NewsArticle) =
-        NewsRepositoryImpl.delete(newsArticle.id)
+        newsRepository.delete(newsArticle.id)
 
     companion object {
         val DefaultNewsArticles = listOf(

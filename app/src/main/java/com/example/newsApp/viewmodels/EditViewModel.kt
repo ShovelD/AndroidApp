@@ -2,7 +2,8 @@ package com.example.newsApp.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.newsApp.NewsRepositoryImpl
+import com.example.newsApp.repositories.NewsRepository
+import com.example.newsApp.repositories.NewsRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -12,13 +13,13 @@ sealed interface EditState{
     data class  DisplayNewsArticle(val newsArticle: NewsArticle?) : EditState
 }
 
-class EditViewModel : ViewModel() {
+class EditViewModel(private val newsRepository: NewsRepository) : ViewModel() {
     val state = MutableStateFlow<EditState>(EditState.Loading)
-    suspend fun onClickSave(newsArticle: NewsArticle) = NewsRepositoryImpl.upsert(newsArticle)
+    suspend fun onClickSave(newsArticle: NewsArticle) = newsRepository.upsert(newsArticle)
 
     fun setStateFlow(id:UUID?){
         viewModelScope.launch{
-            NewsRepositoryImpl.getNewsArticle(id).collect{ newsArticle->
+            newsRepository.getNewsArticle(id).collect{ newsArticle->
                 state.value = EditState.DisplayNewsArticle(newsArticle)
 
             }

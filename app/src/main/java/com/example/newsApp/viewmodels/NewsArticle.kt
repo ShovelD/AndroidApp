@@ -11,4 +11,17 @@ data class NewsArticle(
     val isDraft: Boolean,
     val tags: List<String>,
     val id: UUID = UUID.randomUUID()
-)
+){
+    companion object {
+        fun getNotFoundArticle(): NewsArticle {
+            return NewsArticle(
+                "article1",
+                "author",
+                "description",
+                Date(),
+                true,
+                listOf("")
+            )
+        }
+    }
+}
