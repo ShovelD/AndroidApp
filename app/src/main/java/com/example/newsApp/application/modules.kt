@@ -14,6 +14,8 @@ import com.example.newsApp.repositories.RemoteNewsRepository
 import com.example.newsApp.repositories.RemoteNewsRepositoryImpl
 import com.example.newsApp.viewmodels.EditViewModel
 import com.example.newsApp.viewmodels.HomeViewModel
+import com.example.newsApp.viewmodels.OverviewMode
+import com.example.newsApp.viewmodels.OverviewViewModel
 import com.example.newsApp.viewmodels.RemoteViewModel
 import io.ktor.client.HttpClient
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -49,4 +51,5 @@ val appModule = module {
     viewModel { HomeViewModel(get<NewsRepository>())}
     viewModel { EditViewModel(get<NewsRepository>()) }
     viewModel{RemoteViewModel(get<RemoteNewsRepository>(),get<NewsRepository>())}
+    viewModel{OverviewViewModel(it.getOrNull(),get(),get(),get())}
 }

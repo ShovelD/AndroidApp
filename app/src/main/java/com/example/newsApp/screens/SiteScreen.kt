@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,6 +35,7 @@ import androidx.navigation.NavController
 import com.example.newsApp.MainActivity
 import com.example.newsApp.R
 import com.example.newsApp.viewmodels.NewsArticle
+import com.example.newsApp.viewmodels.OverviewMode
 import com.example.newsApp.viewmodels.RemoteState
 import com.example.newsApp.viewmodels.RemoteViewModel
 import org.koin.compose.koinInject
@@ -59,7 +61,8 @@ fun SiteScreenContent(navController: NavController, onItemClicked:(NewsArticle)-
                     for(item in state.newsArticles){
                         RemoteNewsArticle(
                             article = item,
-                            onItemClick = {onItemClicked(item)}
+                            onItemClick = {onItemClicked(item)},
+                            onDetailsClick = {navController.navigate("Overview?id=${item.id},mode=${OverviewMode.FromRemote}")}
                         )
                     }
                 }
@@ -69,15 +72,19 @@ fun SiteScreenContent(navController: NavController, onItemClicked:(NewsArticle)-
     }
 }
 @Composable
-fun RemoteNewsArticle(article: NewsArticle,onItemClick:()->Unit) {
+fun RemoteNewsArticle(article: NewsArticle,onItemClick:()->Unit,onDetailsClick:()->Unit) {
     Text(
-        text = article.articleTitle,
-        modifier = Modifier.padding(30.dp).
-        clickable { onItemClick.invoke() }
+        text = article.articleTitle + "\t${article.id}",
+        modifier = Modifier
+            .padding(30.dp)
+            .clickable { onItemClick.invoke() }
             .clip(RoundedCornerShape(10))
             .background(MaterialTheme.colorScheme.secondary),
 
     )
+    Button(onClick = onDetailsClick, modifier = Modifier.fillMaxWidth()) {
+        Text(text = "details")
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

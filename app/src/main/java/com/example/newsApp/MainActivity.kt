@@ -13,8 +13,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.newsApp.screens.AboutAppComposable
 import com.example.newsApp.screens.EditComposable
 import com.example.newsApp.screens.HomeScreen
+import com.example.newsApp.screens.Overview
 import com.example.newsApp.screens.SiteComposable
 import com.example.newsApp.ui.theme.AppTheme
+import com.example.newsApp.viewmodels.OverviewMode
 import com.google.gson.GsonBuilder
 import java.util.UUID
 
@@ -115,6 +117,29 @@ class MainActivity : ComponentActivity() {
                         }
                     ) {
                         SiteComposable(navController)
+                    }
+                    composable(
+                        "Overview?id={id},mode={mode}",
+                        enterTransition = {
+                            slideIntoContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
+                                animationSpec = tween(400)
+                            )
+                        },
+                        exitTransition = {
+                            slideOutOfContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
+                                animationSpec = tween(400)
+                            )
+                        }
+                    ) { navBackStackEntry ->
+                        val idString = navBackStackEntry.arguments?.getString("id")
+                        val converter = GsonBuilder().create()
+                        val id = converter.fromJson(idString, UUID::class.java)
+
+                        val modeString = navBackStackEntry.arguments?.getString("mode")
+                        val mode = converter.fromJson(modeString,OverviewMode::class.java)
+                        Overview(navController, id = id, mode = mode)
                     }
                 }
             }

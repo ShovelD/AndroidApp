@@ -11,9 +11,11 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.util.Date
+import java.util.UUID
 
 
 @Serializable
@@ -50,17 +52,25 @@ internal class RemoteDataSourceImpl(private val client:HttpClient):RemoteNewsDat
         emit(newsList.articles.map {
             val title = it.title ?: ""
             val author = it.author ?: ""
-            val description =it.description?:""
+            val description = it.description?:""
             NewsArticle(
                 title,
                 author,
                 description,
                 Date(),
                 false,
-                listOf("")
+                listOf(""),
+                id = UUID.nameUUIDFromBytes(author.toByteArray() + title.toByteArray()+description.toByteArray())
             )
         })
     }
+
+    override fun getSingleArticle(id:UUID?): Flow<NewsArticle?> {
+        return getArticles().map {articles->
+        articles.find { it.id == id }
+        }
+    }
+
     internal companion object{
         const val baseUri = "GET https://newsapi.org/v2/top-headlines?country=us"
         const val ApiKey = "f482bb95f0b540b6955a9ce07862a55a"

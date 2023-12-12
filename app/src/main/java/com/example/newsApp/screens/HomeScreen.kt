@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MailOutline
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -50,6 +51,8 @@ import com.example.newsApp.MainActivity
 import com.example.newsApp.viewmodels.NewsArticle
 import com.example.newsApp.R
 import com.example.newsApp.viewmodels.HomeState
+import com.example.newsApp.viewmodels.OverviewMode
+import com.example.newsApp.viewmodels.OverviewViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -139,7 +142,7 @@ fun NewsArticleItem(article: NewsArticle, navController: NavController, onDelete
             .clip(CutCornerShape(5))
             .fillMaxWidth()
             .padding(2.dp)
-            .clickable { navController.navigate("EditScreen?id=${article.id}")},
+            .clickable { navController.navigate("EditScreen?id=${article.id}") },
         horizontalArrangement = Arrangement.End
     ) {
         Column(
@@ -148,7 +151,7 @@ fun NewsArticleItem(article: NewsArticle, navController: NavController, onDelete
         ) {
             Row {
                 Button(
-                    onClick = { onDeleteClick() },
+                    onClick = { navController.navigate("Overview?id=${article.id},mode=${OverviewMode.FromLocal}") },
                     modifier = Modifier
                         .clip(RoundedCornerShape(10))
                         .background(MaterialTheme.colorScheme.primary)
@@ -162,47 +165,61 @@ fun NewsArticleItem(article: NewsArticle, navController: NavController, onDelete
                 }
             }
         }
-
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.secondary)
-                .fillMaxWidth()
-        ) {
-            Text(
-                text = article.articleTitle,
-                fontFamily = MainActivity.AcmeFont,
-                fontSize = 14.sp
-            )
-            Text(
-                text = article.articleAuthor,
-                fontFamily = MainActivity.AcmeFont,
-                fontSize = 14.sp
-            )
-            Text(
-                text = stringResource(R.string.description) + article.articleDescription,
-                fontFamily = MainActivity.AcmeFont,
-                fontSize = 14.sp
-            )
-            val formatter = SimpleDateFormat("dd.MM.yyyy")
-            Text(
-                text = stringResource(R.string.date) + formatter.format(article.articlePublishingDate),
-                fontFamily = MainActivity.AcmeFont,
-                fontSize = 14.sp
-            )
-            if (article.isDraft)
-                Text(
-                    text = stringResource(R.string.draft),
-                    color = Color.Red,
-                    fontFamily = MainActivity.AcmeFont,
-                    fontSize = 14.sp
+        Row {
+            Button(
+                onClick = { onDeleteClick() },
+                modifier = Modifier
+                    .clip(RoundedCornerShape(10))
+                    .background(MaterialTheme.colorScheme.primary)
+                    .fillMaxHeight()
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Settings,
+                    contentDescription = "delete",
+                    tint = Color.Red,
                 )
+            }
+        }
+    }
+    Column(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.secondary)
+            .fillMaxWidth()
+    ) {
+        Text(
+            text = article.articleTitle,
+            fontFamily = MainActivity.AcmeFont,
+            fontSize = 14.sp
+        )
+        Text(
+            text = article.articleAuthor,
+            fontFamily = MainActivity.AcmeFont,
+            fontSize = 14.sp
+        )
+        Text(
+            text = stringResource(R.string.description) + article.articleDescription,
+            fontFamily = MainActivity.AcmeFont,
+            fontSize = 14.sp
+        )
+        val formatter = SimpleDateFormat("dd.MM.yyyy")
+        Text(
+            text = stringResource(R.string.date) + formatter.format(article.articlePublishingDate),
+            fontFamily = MainActivity.AcmeFont,
+            fontSize = 14.sp
+        )
+        if (article.isDraft)
             Text(
-                text = stringResource(R.string.tags),
-                color = Color.Blue,
+                text = stringResource(R.string.draft),
+                color = Color.Red,
                 fontFamily = MainActivity.AcmeFont,
                 fontSize = 14.sp
             )
-        }
+        Text(
+            text = stringResource(R.string.tags),
+            color = Color.Blue,
+            fontFamily = MainActivity.AcmeFont,
+            fontSize = 14.sp
+        )
     }
 }
 @OptIn(ExperimentalMaterial3Api::class)
