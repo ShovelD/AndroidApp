@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -73,14 +74,18 @@ fun OverViewComposable(state:OverviewState,intent:(OverviewIntent)->Unit){
         }
         is OverviewState.DisplayingRemoteArticle ->{
             val article = state.article?: NewsArticle.getNotFoundArticle()
-            OverViewContent(article = article, buttonText = "Add to favorite"){
+            OverViewContent(article = article,
+                onClosButtonClick = {intent(OverviewIntent.ExitClicked)},
+                buttonText = "Add to favorite"){
                 intent(OverviewIntent.AddToFavoritesClicked(article))
                 intent(OverviewIntent.ExitClicked)
             }
         }
         is OverviewState.DisplayingPrivateArticle ->{
             val article = state.article?: NewsArticle.getNotFoundArticle()
-            OverViewContent(article = article,buttonText = "RemoveFromFavorite"){
+            OverViewContent(article = article,
+                onClosButtonClick = {intent(OverviewIntent.ExitClicked)},
+                buttonText = "RemoveFromFavorite"){
                 intent(OverviewIntent.RemoveFromFavoritesClicked(article.id))
                 intent(OverviewIntent.ExitClicked)
             }
@@ -93,21 +98,27 @@ fun OverViewComposable(state:OverviewState,intent:(OverviewIntent)->Unit){
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun OverViewContent(article:NewsArticle,buttonText:String,event: ()->Unit){
+fun OverViewContent(article:NewsArticle,buttonText:String,onClosButtonClick:()->Unit,event: ()->Unit){
     Scaffold (
-    ){
+        topBar = { OverviewScreenTopBar(onClosButtonClick)}
+    ){value->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .padding(value)
         ) {
-            Text(text = "Title: ${article.articleTitle}", modifier = Modifier.padding(10.dp)
+            Text(text = "Title: ${article.articleTitle}", modifier = Modifier
+                .padding(10.dp)
                 .background(MaterialTheme.colorScheme.primary))
-            Text(text = "Author: ${article.articleAuthor}",modifier = Modifier.padding(10.dp)
+            Text(text = "Author: ${article.articleAuthor}",modifier = Modifier
+                .padding(10.dp)
                 .background(MaterialTheme.colorScheme.primary))
-            Text(text = "Description: ${article.articleDescription}",modifier = Modifier.padding(10.dp)
+            Text(text = "Description: ${article.articleDescription}",modifier = Modifier
+                .padding(10.dp)
                 .background(MaterialTheme.colorScheme.primary))
-            Text(text = "Date: ${article.articlePublishingDate}",modifier = Modifier.padding(10.dp)
+            Text(text = "Date: ${article.articlePublishingDate}",modifier = Modifier
+                .padding(10.dp)
                 .background(MaterialTheme.colorScheme.primary))
             Button(
                 onClick = { event() },
@@ -128,4 +139,26 @@ fun OverviewLoading(){
             trackColor = MaterialTheme.colorScheme.tertiary
         )
     }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun OverviewScreenTopBar(onCloseEvent:()->Unit){
+    CenterAlignedTopAppBar(
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.tertiary
+        ),
+        title = {
+            Text(
+                text = "Details",
+                fontFamily = MainActivity.AcmeFont,
+                fontSize = 30.sp
+            )
+        },
+        navigationIcon = {
+            IconButton(onClick = onCloseEvent) {
+                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Info")
+            }
+        }
+    )
 }

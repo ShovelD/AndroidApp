@@ -158,8 +158,8 @@ fun NewsArticleItem(article: NewsArticle, navController: NavController, onDelete
                         .fillMaxHeight()
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Delete,
-                        contentDescription = "delete",
+                        imageVector = Icons.Filled.Settings,
+                        contentDescription = "details",
                         tint = Color.Red,
                     )
                 }
@@ -174,7 +174,7 @@ fun NewsArticleItem(article: NewsArticle, navController: NavController, onDelete
                     .fillMaxHeight()
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Settings,
+                    imageVector = Icons.Filled.Delete,
                     contentDescription = "delete",
                     tint = Color.Red,
                 )

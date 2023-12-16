@@ -97,7 +97,7 @@ fun RemoteScreenTopBar(navController: NavController) {
         ),
         title = {
             Text(
-                text = stringResource(id = R.string.home_screen),
+                text = "Top News",
                 fontFamily = MainActivity.AcmeFont,
                 fontSize = 30.sp
             )
